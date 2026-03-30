@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Log Deteksi | VisionGuard IoT{% endblock %}
+{% block page_title %}Log Deteksi{% endblock %}
+{% block nav_log %}bg-cyan-50 text-cyan-700 font-semibold{% endblock %}
+
+{% block content %}
+
+<!-- Filter -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6">
+  <form method="GET" class="flex items-center gap-4">
+    <div class="flex-1">
+      <input type="text" name="search" placeholder="Cari nama anggota..." value="{{ request.GET.search }}"
+        class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+    </div>
+    <div>
+      <input type="date" name="tanggal" value="{{ request.GET.tanggal }}"
+        class="rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+    </div>
+    <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition">
+      Filter
+    </button>
+    <a href="/log/" class="text-sm text-slate-500 hover:text-slate-700 px-2 py-2.5">Reset</a>
+  </form>
+</div>
+
+<!-- Table -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm">
+  <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+    <h2 class="font-semibold text-slate-800">Riwayat Deteksi</h2>
+    <span class="text-xs text-slate-400">{{ total_log }} total log</span>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+          <th class="px-6 py-3 text-left">No</th>
+          <th class="px-6 py-3 text-left">Nama</th>
+          <th class="px-6 py-3 text-left">NIM</th>
+          <th class="px-6 py-3 text-left">Waktu Deteksi</th>
+          <th class="px-6 py-3 text-left">Status</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {% for log in log_list %}
+        <tr class="hover:bg-slate-50 transition">
+          <td class="px-6 py-4 text-slate-400">{{ forloop.counter }}</td>
+          <td class="px-6 py-4 font-medium text-slate-800">
+            {% if log.id_anggota %}{{ log.id_anggota.nama }}{% else %}-{% endif %}
+          </td>
+          <td class="px-6 py-4 text-slate-500">
+            {% if log.id_anggota %}{{ log.id_anggota.nim }}{% else %}-{% endif %}
+          </td>
+          <td class="px-6 py-4 text-slate-500">{{ log.waktu_deteksi|date:"d M Y H:i:s" }}</td>
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-600 text-xs font-medium px-2.5 py-1 rounded-full">
+              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+              {{ log.status }}
+            </span>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="px-6 py-12 text-center">
+            <div class="flex flex-col items-center gap-3">
+              <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+              <p class="text-slate-400 text-sm">Belum ada log deteksi</p>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

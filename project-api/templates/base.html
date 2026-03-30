@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>{% block title %}VisionGuard IoT{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="h-full font-sans antialiased bg-slate-50 text-slate-800">
+
+<!-- Sidebar + Main Layout -->
+<div class="flex h-screen overflow-hidden">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shadow-sm">
+    <!-- Logo -->
+    <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100">
+      <div class="w-10 h-10 flex-shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full">
+          <path d="M50 5 L90 20 L90 55 C90 75 70 92 50 98 C30 92 10 75 10 55 L10 20 Z" 
+                fill="none" stroke="#0891b2" stroke-width="3"/>
+          <ellipse cx="50" cy="52" rx="18" ry="12" fill="none" stroke="#0891b2" stroke-width="2.5"/>
+          <circle cx="50" cy="52" r="7" fill="#0891b2"/>
+          <circle cx="50" cy="52" r="3.5" fill="white"/>
+        </svg>
+      </div>
+      <div>
+        <p class="font-bold text-slate-800 text-sm">VisionGuard IoT</p>
+        <p class="text-xs text-slate-400">Sistem Absensi Wajah</p>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 px-4 py-6 space-y-1">
+      <a href="/dashboard/" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {% block nav_dashboard %}text-slate-600 hover:bg-slate-50{% endblock %} transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        Dashboard
+      </a>
+      <a href="/anggota/" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {% block nav_anggota %}text-slate-600 hover:bg-slate-50{% endblock %} transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        Data Anggota
+      </a>
+      <a href="/log/" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {% block nav_log %}text-slate-600 hover:bg-slate-50{% endblock %} transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+        Log Deteksi
+      </a>
+      <a href="/statistik/" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {% block nav_statistik %}text-slate-600 hover:bg-slate-50{% endblock %} transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        Statistik
+      </a>
+    </nav>
+
+    <!-- User Info -->
+    <div class="px-4 py-4 border-t border-slate-100">
+      <div class="flex items-center gap-3 px-3 py-2">
+        <div class="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 font-bold text-sm">
+          A
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-slate-700 truncate">Admin</p>
+          <p class="text-xs text-slate-400">Administrator</p>
+        </div>
+        <a href="/logout/" class="text-slate-400 hover:text-red-500 transition" title="Logout">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto">
+    <!-- Topbar -->
+    <header class="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between sticky top-0 z-10">
+      <h1 class="text-lg font-bold text-slate-800">{% block page_title %}Dashboard{% endblock %}</h1>
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full">
+          <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+          Sistem Aktif
+        </span>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="p-8">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

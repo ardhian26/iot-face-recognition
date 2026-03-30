@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block title %}Detail Anggota | VisionGuard IoT{% endblock %}
+{% block page_title %}Detail Anggota{% endblock %}
+{% block nav_anggota %}bg-cyan-50 text-cyan-700 font-semibold{% endblock %}
+
+{% block content %}
+
+<a href="/anggota/" class="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6 transition">
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+  </svg>
+  Kembali ke Data Anggota
+</a>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    
+    <div class="flex flex-col items-center mb-6">
+      <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-cyan-50 shadow-sm mb-3 flex items-center justify-center bg-slate-100">
+        {% if anggota.foto_wajah %}
+          <img src="{{ anggota.foto_wajah.url }}" alt="{{ anggota.nama }}" class="w-full h-full object-cover">
+        {% else %}
+          <div class="text-cyan-600 text-4xl font-bold">
+            {{ anggota.nama|first|upper }}
+          </div>
+        {% endif %}
+      </div>
+      <h2 class="text-lg font-bold text-slate-800 text-center">{{ anggota.nama }}</h2>
+      <p class="text-sm text-slate-400">{{ anggota.nim }}</p>
+    </div>
+
+    <div class="space-y-3 text-sm">
+      <div class="flex justify-between items-center py-2 border-b border-slate-100">
+        <span class="text-slate-500">Nama Lengkap</span>
+        <span class="font-medium text-slate-800">{{ anggota.nama }}</span>
+      </div>
+      <div class="flex justify-between items-center py-2 border-b border-slate-100">
+        <span class="text-slate-500">NIM / ID</span>
+        <span class="font-medium text-slate-800">{{ anggota.nim }}</span>
+      </div>
+      <div class="flex justify-between items-center py-2 border-b border-slate-100">
+        <span class="text-slate-500">Terdaftar</span>
+        <span class="font-medium text-slate-800">{{ anggota.created_at|date:"d M Y" }}</span>
+      </div>
+      <div class="flex justify-between items-center py-2 border-b border-slate-100">
+        <span class="text-slate-500">Jam Daftar</span>
+        <span class="font-medium text-slate-800">{{ anggota.created_at|date:"H:i" }} WIB</span>
+      </div>
+      <div class="flex justify-between items-center py-2">
+        <span class="text-slate-500">Status Wajah</span>
+        {% if anggota.encoding_wajah %}
+        <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-600 text-xs font-medium px-2.5 py-1 rounded-full">
+          <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+          Terdaftar
+        </span>
+        {% else %}
+        <span class="inline-flex items-center gap-1 bg-red-50 text-red-500 text-xs font-medium px-2.5 py-1 rounded-full">
+          <span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
+          Belum Ada
+        </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <a href="/anggota/{{ anggota.id }}/hapus/" 
+        onclick="return confirm('Yakin hapus anggota ini?')"
+        class="w-full inline-flex items-center justify-center gap-2 border border-red-200 text-red-500 hover:bg-red-50 text-sm font-semibold py-2.5 rounded-xl transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+        Hapus Anggota
+      </a>
+    </div>
+  </div>
+
+  <div class="lg:col-span-2 space-y-6">
+
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        <p class="text-sm text-slate-500 mb-2">Deteksi Hari Ini</p>
+        <p class="text-4xl font-bold text-cyan-600">{{ log_hari_ini }}</p>
+        <p class="text-xs text-slate-400 mt-1">kali terdeteksi</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        <p class="text-sm text-slate-500 mb-2">Total Semua Log</p>
+        <p class="text-4xl font-bold text-slate-800">{{ total_log }}</p>
+        <p class="text-xs text-slate-400 mt-1">total deteksi</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <h3 class="font-semibold text-slate-800 mb-4">Aktivitas 7 Hari Terakhir</h3>
+      <canvas id="chartAnggota" height="120"></canvas>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm">
+      <div class="px-6 py-4 border-b border-slate-100">
+        <h3 class="font-semibold text-slate-800">Log Deteksi Terbaru</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+              <th class="px-6 py-3 text-left">No</th>
+              <th class="px-6 py-3 text-left">Waktu</th>
+              <th class="px-6 py-3 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {% for log in log_terbaru %}
+            <tr class="hover:bg-slate-50 transition">
+              <td class="px-6 py-3 text-slate-400">{{ forloop.counter }}</td>
+              <td class="px-6 py-3 text-slate-700">{{ log.waktu_deteksi|date:"d M Y H:i:s" }}</td>
+              <td class="px-6 py-3">
+                <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-600 text-xs font-medium px-2.5 py-1 rounded-full">
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  {{ log.status }}
+                </span>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="px-6 py-8 text-center text-slate-400">Belum ada log untuk anggota ini</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const ctx = document.getElementById('chartAnggota').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: {{ chart_labels|safe }},
+    datasets: [{
+      label: 'Deteksi',
+      data: {{ chart_data|safe }},
+      backgroundColor: 'rgba(8, 145, 178, 0.15)',
+      borderColor: 'rgba(8, 145, 178, 1)',
+      borderWidth: 2,
+      borderRadius: 8,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+
+{% endblock %}
