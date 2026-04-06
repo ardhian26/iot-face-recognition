@@ -51,19 +51,23 @@
     <p class="text-xs text-slate-400 mt-1">Total semua log</p>
   </div>
 
-  <!-- Status Sensor -->
+   <!-- Status Sensor -->
   <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-    <div class="flex items-center justify-between mb-4">
-      <p class="text-sm font-medium text-slate-500">Status Sensor</p>
-      <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
-        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-      </div>
+  <div class="flex items-center justify-between mb-4">
+    <p class="text-sm font-medium text-slate-500">Status Sensor</p>
+    <div class="w-10 h-10 {% if sensor_aktif %}bg-emerald-50{% else %}bg-red-50{% endif %} rounded-xl flex items-center justify-center">
+      <svg class="w-5 h-5 {% if sensor_aktif %}text-emerald-600{% else %}text-red-500{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
     </div>
-    <p class="text-3xl font-bold text-emerald-600">Aktif</p>
-    <p class="text-xs text-slate-400 mt-1">PIR + Kamera online</p>
   </div>
+  <p class="text-3xl font-bold {% if sensor_aktif %}text-emerald-600{% else %}text-red-500{% endif %}">
+    {% if sensor_aktif %}Aktif{% else %}Mati{% endif %}
+  </p>
+  <p class="text-xs text-slate-400 mt-1">
+    {% if sensor_aktif %}PIR + Kamera online{% else %}Sensor tidak merespons{% endif %}
+  </p>
+</div>
 
 </div>
 
