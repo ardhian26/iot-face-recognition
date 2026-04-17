@@ -1,4 +1,3 @@
-@@ -1,5 +1,63 @@
 Judul Proyek: Monitoring Wajah Berbasis IoT.
 # VisionGuard IoT - Face Recognition System
 
@@ -7,9 +6,26 @@ Sistem pemantauan keamanan cerdas berbasis IoT yang mengintegrasikan pengenalan 
 ---
 
 Teknologi: Python, Django, ESP32, OpenCV, dan MySQL
-## 📸 Preview Dashboard
-![Dashboard Preview](project-api/templates/screenshots)
-*Tampilan antarmuka monitoring real-time menggunakan Tailwind CSS.*
+## 📸 Galeri Preview Proyek
+
+### Halaman Login
+![Login](project-api/templates/screenshots/login.png)
+
+### Dashboard Utama
+![Dashboard](project-api/templates/screenshots/dashboard.png)
+
+### Manajemen Data Anggota
+![Data Anggota](project-api/templates/screenshots/data%20anggota.png)
+
+## Tambah Anggota
+![Tambah Anggota](project-api/templates/screenshots/tambah%20anggota.png)
+
+## Log Deteksi
+![Log Deteksi](project-api/templates/screenshots/log.png)
+
+### Statistik Monitoring
+![Statistik](project-api/templates/screenshots/statistik.png)
+
 
 ---
 
